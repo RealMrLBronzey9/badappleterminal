@@ -1,0 +1,7 @@
+*.exe
+*.out
+*.drawio
+/.vscode
+/Bitmaps
+cbmp.c 
+cbmp.h
