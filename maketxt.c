@@ -6,11 +6,13 @@
 
 
 // Separate script to make ascii text file of bad apple!!
+// I used this Github project that helped me manipulate the bitmaps I created via ffmpeg
+// If anybody wants to create their own frames.txt then I guess use ffmpeg to get a bunch of bitmaps for bad apple
+// https://github.com/mattflow/cbmp
 
 // Amount of bitmaps in the bitmap file
 #define AMT_OF_BITMAPS 5258
 #define FILEPATH_WIN "D:\\LowLevel\\C Projects\\BadAppleTerminal\\Bitmaps\\"
-#define FILEPATH_LINUX  "/mnt/d/LowLevel/C Projects/BadAppleTerminal/Bitmaps/"
 
 // Bitmaps are 144x108
 #define BITMAP_WIDTH 144
@@ -50,49 +52,44 @@ int main(){
     return 0;
 }
 
-// Gets alpha of pixel and returns an ASCII char
-/*
-    27 Lines y
-
-
-*/
+// Gets alpha of pixel and returns an ASCII char based on the light
 char GetASCII(int pixelAlpha){
-    if (pixelAlpha > 233){
+    if (pixelAlpha > 233)   
         return '@';
-    }
-    else if(pixelAlpha > 212){
+
+    else if(pixelAlpha > 212)
         return '$';
-    }
-    else if(pixelAlpha > 191){
+
+    else if(pixelAlpha > 191)
         return '#';
-    }
-    else if(pixelAlpha > 170){
+    
+    else if(pixelAlpha > 170)
         return '*';
-    }
-    else if(pixelAlpha > 149){
+    
+    else if(pixelAlpha > 149)
         return '!';
-    }
-    else if(pixelAlpha > 128){
+    
+    else if(pixelAlpha > 128)
         return '=';
-    }
-    else if(pixelAlpha > 107){
+    
+    else if(pixelAlpha > 107)
         return ';';
-    }
-    else if(pixelAlpha > 86){
+    
+    else if(pixelAlpha > 86)
         return ':';
-    }
-    else if(pixelAlpha > 65){
+    
+    else if(pixelAlpha > 65)
         return '~';
-    }
-    else if(pixelAlpha > 44){
+    
+    else if(pixelAlpha > 44)
         return ',';
-    }
-    else if(pixelAlpha > 23){
+    
+    else if(pixelAlpha > 23)
         return '.';
-    }
-    else{
+    
+    else
         return '`';
-    }
+    
 }
 
 
@@ -104,13 +101,12 @@ void PasteFrame(BMP* bmp, char* frameBuffer, FILE* textFile){
     char pixelASCII;
     pixelASCII = '\0'; 
     frameBuffer[0] = '\0';
-    // for looop for the height of bitmap image 
-    // Increment by 4 to check the alpha of every 4 pixels
+    // for loop for the height of bitmap image 
     for (int i = BITMAP_HEIGHT-1; i > 0; i -= 4){
         // for loop for the width of the bitmap image
         for (int j = 0; j < BITMAP_WIDTH; j += 2){
             // Get alpha of pixel
-            pixelAlpha = get_pixel_alpha(bmp, j, i);
+            pixelAlpha = get_pixel_alpha(bmp, j, i);    // From that Github project I slightly modified get_pixel_rgb into this function to just give me the red  
             
             // Get ascii for the pixel
             pixelASCII = GetASCII(pixelAlpha);

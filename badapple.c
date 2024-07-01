@@ -3,11 +3,13 @@
 #include <windows.h>
 #include <string.h>
 
-// To test my c skills, gonna make a bad apple!! terminal
-// Used https://github.com/mattflow/cbmp github project to read the bitmaps
+// To test my current c skills, gonna make a bad apple!! terminal program
+// It is terribly slow and lots of flickering
+// If anybody wants to run this for some reason, you gotta change FILEPATH_TEXT to where your frames.txt is and also you gotta create frames.txt using the maketxt.c
+// Used https://github.com/mattflow/cbmp Github project to read the bitmaps
 
 // NOTE TO SELF: Bitmaps created 24 fps bad apple!!
-#define FILEPATH_TEXT "D:\\LowLevel\\C Projects\\BadAppleTerminal\\frames.txt"
+#define FILEPATH_TEXT "D:\\LowLevel\\C Projects\\BadAppleTerminal\\frames.txt"  // Replace with filepath of frames
 #define FRAME_LINES 27  // Each frame has 27 lines
 #define AMT_OF_BITMAPS 5258
 #define LENGTH_OF_LINE 74
