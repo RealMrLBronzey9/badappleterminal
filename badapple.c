@@ -9,75 +9,72 @@
 // Used https://github.com/mattflow/cbmp Github project to read the bitmaps
 
 // NOTE TO SELF: Bitmaps created 24 fps bad apple!!
-#define FILEPATH_TEXT "D:\\LowLevel\\C Projects\\BadAppleTerminal\\frames.txt"  // Replace with filepath of frames
-#define FRAME_LINES 27  // Each frame has 27 lines
+#define FILEPATH_TEXT "./frames.txt" // Replace with filepath of frames
+
 #define AMT_OF_BITMAPS 5258
-#define LENGTH_OF_LINE 74
 
+#define FRAME_LINES 27 // Each frame has 27 lines
+#define LENGTH_OF_LINE 73
 
+#define FRAME_SIZE (FRAME_LINES * LENGTH_OF_LINE)
 
 // Functions
-void ClearTerminal();   // Clears terminall
+void CursorHome();
+void ClearTerminal();
 
-int main(){
-    
-    // Add code to open text file and print each frame of bad apple ascii
+int main()
+{
+	// Add code to open text file and print each frame of bad apple ascii
 
-    // Variables
-    FILE* textFile = NULL;
-    char* frame = malloc(3001);
-    char frameLine[80];
+	// Variables
+	FILE *textFile = NULL;
+	char frame[FRAME_SIZE + 1];
 
-    memset(frame, 0 ,3001); // Init buffer to null chars
+	// Open textfile
+	textFile = fopen(FILEPATH_TEXT, "r");
 
-    // Open textfile
-    textFile = fopen(FILEPATH_TEXT, "r");
+	// Check if textfile is not read or if mem allocation of frame has failed
+	if (textFile == NULL) {
+		printf("ERROR: Text file not read!");
+		getchar();
+		return 1;
+	}
 
-    // Check if textfile is not read or if mem allocation of frame has failed
-    if(textFile == NULL){
-        printf("ERROR: Text file not read!");
-        getchar();
-        return 1;
-    }
-    else if(frame == NULL){
-        printf("ERROR: frame failed to allocate memory!!");
-        getchar();
-        return 1;
-    }
+	// Set stdout to fully buffered
+	int stdout_buffer_size = FRAME_SIZE * 3; // Kinda arbitrary value
+	char *stdout_buffer = malloc(stdout_buffer_size);
+	setvbuf(stdout, stdout_buffer, _IOFBF, stdout_buffer_size);
 
+	ClearTerminal();
 
-    // Get frame lines and append to the frame
-    for (int i = 0; i < AMT_OF_BITMAPS - 1; i++){   // Frame number (index)
-        for (int j = 0; j < FRAME_LINES; j++){  // Frame lines
-            fseek(textFile, (LENGTH_OF_LINE*FRAME_LINES*i)+(LENGTH_OF_LINE*j), SEEK_SET);
-            fgets(frameLine, 80, textFile);
-            strncat(frame, frameLine, 81);
-        }
+	// Get frame lines and append to the frame
+	for (int i = 0; i < AMT_OF_BITMAPS - 1; i++) { // Frame number (index)
 
-        // Print frame
-        printf("%s", frame);
-        memset(frame, 0 ,3001); // Init buffer to null chars
-        Sleep(50);
-        ClearTerminal();
+		fread(frame, 1, FRAME_SIZE, textFile);
+		frame[FRAME_SIZE] = '\0';
 
-    }
-    
+		// Print frame
+		CursorHome();
+		printf("%s", frame);
+		fflush(stdout);
+		Sleep(30);
+	}
 
+	// Finish program by freeing memories
+	free(stdout_buffer);
+	getchar();
 
-    // Finish program by freeing memories
-    free(frame);
-    getchar();
-
-    return 0;
+	return 0;
 }
 
-// Function to clear terminal 
-void ClearTerminal(){
-
-    // So this print statement clears the terminal
-    printf("\033[2J");
-    printf("\033[H");
-
+// Move cursor to the beginning of the terminal
+void CursorHome()
+{
+	printf("\033[0;0H");
 }
 
-
+// Removes all characters from the terminal
+void ClearTerminal()
+{
+	printf("\033[2J");
+}
